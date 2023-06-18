@@ -1,6 +1,7 @@
 package com.example.criminalintent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,12 @@ class CrimeHolder(private val binding: ListItemCrimeBinding): RecyclerView.ViewH
 
         binding.root.setOnClickListener {
             Toast.makeText(binding.root.context, "${crime.title} is clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.crimeSolved.visibility = if (crime.isSolved) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 }
