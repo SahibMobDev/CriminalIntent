@@ -1,6 +1,8 @@
 package com.example.criminalintent
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -15,7 +17,7 @@ class CrimeListViewModel : ViewModel() {
 
     val crimes = mutableListOf<Crime>()
 
-    init {
+        init {
         Log.d(TAG, "init starting")
         viewModelScope.launch {
             Log.d(TAG, "coroutine launched")
