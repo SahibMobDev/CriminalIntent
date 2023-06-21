@@ -1,7 +1,6 @@
 package com.example.criminalintent
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.criminalintent.databinding.FragmentCrimeListBinding
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class CrimeListFragment : Fragment() {
@@ -38,8 +37,12 @@ class CrimeListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val crimes = crimeListViewModel.loadCrime()
-                binding.crimeRecyclerView.adapter = CrimeListAdapter(crimes)
+                crimeListViewModel.crimes.collect { crimes ->
+                    binding.crimeRecyclerView.adapter = CrimeListAdapter(crimes) {
+                        findNavController().navigate(R.id.show_crime_detail)
+                    }
+                }
+
             }
         }
     }
