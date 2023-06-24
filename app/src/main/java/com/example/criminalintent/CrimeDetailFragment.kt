@@ -1,9 +1,7 @@
 package com.example.criminalintent
 
-import android.icu.util.GregorianCalendar
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +48,7 @@ class CrimeDetailFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,7 +80,7 @@ class CrimeDetailFragment : Fragment() {
             DatePickerFragment.REQUEST_KEY_DATE
         ) { _, bundle ->
             val newDate =
-                    bundle.get(DatePickerFragment.REQUEST_KEY_DATE) as Date
+                    bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
 
         }
