@@ -1,7 +1,9 @@
 package com.example.criminalintent
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
 
+private const val DATE_FORMAT = "EEE, MM, dd"
 
 class CrimeDetailFragment : Fragment() {
 
@@ -96,7 +99,40 @@ class CrimeDetailFragment : Fragment() {
                 findNavController().navigate(CrimeDetailFragmentDirections.selectDate(crime.date))
             }
             crimeSolved.isChecked = crime.isSolved
+
+            crimeReport.setOnClickListener {
+                val reportIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "plain/text"
+                    putExtra(Intent.EXTRA_TEXT, getCrimeReport(crime))
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        getString(R.string.crime_report_subject)
+                    )
+                }
+                startActivity(reportIntent)
+            }
         }
+    }
+
+    private fun getCrimeReport(crime: Crime): String {
+
+        val solvedString = if (crime.isSolved) {
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = DateFormat.format(DATE_FORMAT, crime.date).toString()
+        val suspectText = if (crime.suspect.isBlank()) {
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect)
+        }
+
+        return getString(
+            R.string.crime_report,
+            crime.title, dateString, solvedString, suspectText
+        )
     }
 
     override fun onDestroyView() {
